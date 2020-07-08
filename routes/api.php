@@ -17,3 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('products', function (Request $request){
+
+    //dd($request->headers->all();
+    //dd($request->headers->get('token'));
+
+
+    $msg = ['msg' =>  'Nenhum produto inserido'];
+    //$response =  new \Illuminate\Http\Response(json_encode($msg));
+    //$response->header('Content-Type', 'application/json');
+
+
+    return response()->json($msg);
+});
