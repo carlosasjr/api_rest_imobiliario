@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('products', function (Request $request){
+Route::get('test', function (Request $request){
 
     //dd($request->headers->all();
     //dd($request->headers->get('token'));
@@ -31,3 +31,9 @@ Route::get('products', function (Request $request){
 
     return response()->json($msg);
 });
+
+//PRODUCTS ROUTE
+Route::namespace('Api')->group(function () {
+    Route::resource('products', 'ProductController');
+});
+
