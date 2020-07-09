@@ -34,7 +34,7 @@ Route::get('test', function (Request $request){
 
 //PRODUCTS ROUTE
 Route::namespace('Api')->group(function () {
-    Route::resource('products', 'ProductController');
+    Route::resource('products', 'ProductController')->middleware('auth.basic');
     Route::resource('users', 'UserController');
 });
 
