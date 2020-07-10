@@ -25,15 +25,19 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return ProductCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->product->paginate(1);
+        $products = $this->product;
 
-       // return response()->json($products);
+        if ($request->has('fields')) {
+            $fields = $request->get('fields');
+            $products = $products->selectRaw($fields);
+        }
 
-        return new ProductCollection($products);
+        return new ProductCollection($products->paginate(10));
     }
 
     /**
