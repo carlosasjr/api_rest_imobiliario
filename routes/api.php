@@ -32,9 +32,10 @@ Route::get('test', function (Request $request){
     return response()->json($msg);
 });
 
-//PRODUCTS ROUTE
 Route::namespace('Api')->group(function () {
+
     Route::resource('products', 'ProductController')->middleware('auth.basic');
+
     Route::resource('users', 'UserController');
 });
 
