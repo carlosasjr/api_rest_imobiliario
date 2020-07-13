@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Repository\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -30,23 +32,26 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->product;
+        $productRepository = new ProductRepository($this->product);
 
-        if ($request->has('fields')) {
-            $fields = $request->get('fields');
-            $products = $products->selectRaw($fields);
+        if ($request->has('conditions')) {
+            $productRepository->selectConditions($request->get('conditions'));
         }
 
-        return new ProductCollection($products->paginate(10));
+        if ($request->has('fields')) {
+            $productRepository->selectFilter($request->get('fields'));
+        }
+
+        return new ProductCollection($productRepository->getResult()->paginate(10));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param ProductRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $data = $request->all();
 
@@ -59,7 +64,7 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return ProductResource
      */
     public function show($id)
     {
@@ -73,11 +78,11 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param ProductRequest $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         $data = $request->all();
 
@@ -92,7 +97,7 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
