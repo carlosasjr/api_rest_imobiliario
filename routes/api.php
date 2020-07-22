@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('test', function (Request $request){
+/*Route::get('test', function (Request $request){
 
     //dd($request->headers->all();
     //dd($request->headers->get('token'));
@@ -30,12 +30,20 @@ Route::get('test', function (Request $request){
 
 
     return response()->json($msg);
-});
+});*/
 
 Route::namespace('Api')->group(function () {
 
-    Route::resource('products', 'ProductController')->middleware('auth.basic');
+    Route::prefix('v1')->group(function () {
+        Route::resource('products', 'ProductController')->middleware('auth.basic');
 
-    Route::resource('users', 'UserController');
+        Route::resource('users', 'UserController');
+
+        Route::get('categories/{id}/realState', 'CategoryController@realState');
+        Route::resource('categories', 'CategoryController');
+
+
+        Route::resource('real-states', 'RealStateController');
+    });
 });
 
