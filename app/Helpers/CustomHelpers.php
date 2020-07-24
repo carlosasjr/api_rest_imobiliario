@@ -1,9 +1,7 @@
 <?php
-
-if (!function_exists('hoje')) {
-    function hoje()
+if (!function_exists('jwt')) {
+    function jwt()
     {
-        return date('d/m/Y H:i:s');
     }
 }
- 
+
