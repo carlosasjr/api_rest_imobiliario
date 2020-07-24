@@ -35,21 +35,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::namespace('Api')->group(function () {
 
     Route::prefix('v1')->group(function () {
+//    Route::resource('products', 'ProductController')->middleware('auth.basic');
+
         Route::post('login', 'Auth\\LoginJwtController@login')->name('login');
 
-        //    Route::resource('products', 'ProductController')->middleware('auth.basic');
 
-        Route::resource('users', 'UserController');
+        Route::group(['middleware' => ['jwt.auth']], function () {
 
-        Route::get('categories/{id}/realState', 'CategoryController@realState');
-        Route::resource('categories', 'CategoryController');
+            Route::resource('users', 'UserController');
 
-        Route::resource('real-states', 'RealStateController');
+            Route::get('categories/{id}/realState', 'CategoryController@realState');
+            Route::resource('categories', 'CategoryController');
 
-        Route::prefix('photos')->group(function () {
-            Route::delete('/{id}', 'RealStatePhotoController@remove')->name('delete');
-            Route::put('set-thumb/{realStateId}/{photoId}', 'RealStatePhotoController@setThumb')->name('setThumb');
+            Route::resource('real-states', 'RealStateController');
+
+            Route::prefix('photos')->group(function () {
+                Route::delete('/{id}', 'RealStatePhotoController@remove')->name('delete');
+                Route::put('set-thumb/{realStateId}/{photoId}', 'RealStatePhotoController@setThumb')->name('setThumb');
+            });
+
         });
+
 
 
     });
