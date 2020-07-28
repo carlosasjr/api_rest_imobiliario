@@ -15,7 +15,7 @@ class AbstractRepository
     /**
      * @var Model
      */
-    private $model;
+    protected $model;
 
 
     /**
@@ -38,7 +38,7 @@ class AbstractRepository
     /**
      * @param $conditions
      */
-    public function selectConditions($conditions)
+    public function setConditions($conditions)
     {
         $expressions = explode(';', $conditions);
         foreach ($expressions as $e) {
@@ -48,11 +48,11 @@ class AbstractRepository
     }
 
     /**
-     * @param $filters
+     * @param $fields
      */
-    public function selectFilter($filters)
+    public function setFields($fields)
     {
-        $this->model = $this->model->selectRaw($filters);
+        $this->model = $this->model->selectRaw($fields);
     }
 
     public function getResult()

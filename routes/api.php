@@ -43,6 +43,11 @@ Route::namespace('Api')->group(function () {
 
         Route::get('refresh', 'Auth\\LoginJwtController@refresh')->name('refresh');
 
+        Route::get('search', 'RealStateSearchController@index')->name('search');
+
+        Route::get('search/{real_state_id}', 'RealStateSearchController@show')->name('search_single');
+
+        //Rotas protegidas
         Route::group(['middleware' => ['jwt.auth']], function () {
 
             Route::resource('users', 'UserController');

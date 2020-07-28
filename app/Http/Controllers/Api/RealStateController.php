@@ -29,7 +29,8 @@ class RealStateController extends Controller
      */
     public function index()
     {
-        $realState = $this->realState->paginate('10');
+        $realState = auth('api')->user()->real_state()->paginate(10);
+
 
         return response()->json($realState, 200);
     }
@@ -49,7 +50,9 @@ class RealStateController extends Controller
 
         try {
 
-            $realState = $this->realState->create($data);
+            $data['user_id'] = auth('api')->user()->id;
+
+            $realState = auth('api')->user()->real_state()->create($data);
 
             if (isset($data['categories']) && count($data['categories'])) {
                 $realState->categories()->sync($data['categories']);
@@ -88,7 +91,7 @@ class RealStateController extends Controller
     {
         try {
 
-            $realState = $this->realState->with('photos')->findOrFail($id);
+            $realState = auth('api')->user()->real_state()->with(['photos', 'address'])->findOrFail($id)->makeHidden('thumb');
 
             return response()->json([
                 'data' => $realState
@@ -115,7 +118,7 @@ class RealStateController extends Controller
 
         try {
 
-            $realState = $this->realState->findOrFail($id);
+            $realState = auth('api')->user()->real_state()->findOrFail($id);
 
             $realState->update($data);
 
@@ -156,7 +159,7 @@ class RealStateController extends Controller
     {
         try {
 
-            $realState = $this->realState->findOrFail($id);
+            $realState = auth('api')->user()->real_state()->findOrFail($id);
 
             $realState->delete();
 

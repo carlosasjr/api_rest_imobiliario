@@ -35,11 +35,11 @@ class ProductController extends Controller
         $productRepository = new ProductRepository($this->product);
 
         if ($request->has('conditions')) {
-            $productRepository->selectConditions($request->get('conditions'));
+            $productRepository->setConditions($request->get('conditions'));
         }
 
         if ($request->has('fields')) {
-            $productRepository->selectFilter($request->get('fields'));
+            $productRepository->setFields($request->get('fields'));
         }
 
         return new ProductCollection($productRepository->getResult()->paginate(10));
